@@ -30,6 +30,29 @@ fn main() {
        ]
     }"#;
 
+    let article: Article = Article {
+        article: String::from("how to add"),
+        author: String::from("Saksham"),
+        paragraph: vec![
+            Paragraph {
+                name: String::from("first"),
+            },
+            Paragraph {
+                name: String::from("nahhh"),
+            },
+            Paragraph {
+                name: String::from("Chad shit"),
+            },
+        ],
+    };
+
+    // write to json
+
+    let json2 = serde_json::to_string(&article).unwrap();
+    println!("the json is: {}", json2);
+
+    // read json
+
     let parsed: Article = read_json_typed(json);
     println!(
         "\n\n The name of the first paragraph is: {}",
