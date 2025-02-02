@@ -22,4 +22,6 @@ async fn main() -> Result<()> {
         .for_each(|x| println!("{}", x));
 
     Ok(())
+
+    // Basic rust projects completed now raise the bar 
 }
