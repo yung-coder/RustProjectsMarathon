@@ -71,3 +71,5 @@ fn read_json_typed(raw_json: &str) -> Article {
         }
     }
 }
+
+// Can try blockchain with rust just to learn no deep dive for now 
