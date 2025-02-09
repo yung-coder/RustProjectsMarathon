@@ -1,4 +1,7 @@
-use actix_web::{get , patch , post, App , HttpResponse , HttpServer,  Responder };
+use actix_web::{get , patch , post, web::Json, App , HttpResponse , HttpServer,  Responder };
+mod models;
+use validator::Validate;
+use crate::models::pizza::BuyPizzaRequest;
 
 #[get("/pizzas")]
 async fn get_pizzas() -> impl Responder {
@@ -6,8 +9,15 @@ async fn get_pizzas() -> impl Responder {
 }
 
 #[post("/buypizza")]
-async fn buy_pizza() -> impl Responder {
-    HttpResponse::Ok().body("Buying a Pizza")
+async fn buy_pizza(body: Json<BuyPizzaRequest>) -> impl Responder {
+    let is_valid = body.validate();
+    match is_valid {
+        Ok(_) => {
+            let pizza_name = body.pizza_name.clone();
+            HttpResponse::Ok().body(format!("pizza entered is {pizza_name}"))
+        }
+        Err(_) => HttpResponse::Ok().body("Pizza name is required"),
+    }
 }
 
 #[patch("/updatepizza/{uuid}")]
