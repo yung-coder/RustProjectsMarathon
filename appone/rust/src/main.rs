@@ -1,14 +1,11 @@
 use actix_cors::Cors;
-use actix_web::{
-    web::{self, to},
-    App, HttpResponse, HttpServer, Responder,
-};
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use chrono::{DateTime, Utc};
-use serde::{ser::Impossible, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
 use uuid::Uuid;
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 
 struct TodoItem {
     id: Uuid,
@@ -36,6 +33,7 @@ struct AppState {
 
 async fn get_todos(data: web::Data<AppState>) -> impl Responder {
     let todos = data.todo_list.lock().unwrap();
+    println!("{:?}", *todos);
     HttpResponse::Ok().json(&*todos)
 }
 
@@ -59,7 +57,7 @@ async fn update_todo(
 ) -> impl Responder {
     let mut todos = data.todo_list.lock().unwrap();
 
-    if let Some(todo) = todos.iter_mut().find(|todo| todo.id == &path) {
+    if let Some(todo) = todos.iter_mut().find(|todo| todo.id == *path) {
         if let Some(title) = &item.title {
             todo.title = title.clone();
         }
@@ -101,7 +99,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(app_state.clone())
             .wrap(cors)
-            .route("/route", web::get().to(get_todos))
+            .route("/todos", web::get().to(get_todos))
             .route("/todos", web::post().to(add_todo))
             .route("/todo/{id}", web::put().to(update_todo))
             .route("/todos/{id}", web::delete().to(delet_todo))
