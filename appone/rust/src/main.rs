@@ -108,3 +108,5 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+
+// paused now build seprate projects and come back when problem or to learn new things related to rust 
