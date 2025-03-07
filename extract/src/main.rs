@@ -23,5 +23,5 @@ async fn main() -> Result<()> {
 
     Ok(())
 
-    // Basic rust projects completed now raise the bar 
+    // Basic rust projects completed now raise the bar adv projects 
 }
